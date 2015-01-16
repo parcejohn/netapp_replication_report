@@ -1,0 +1,19 @@
+notification_settings:
+    smtp_server: 'webmail2010.cpg.org'
+    from_address: 'cpg_netapp@cpg.org'
+    to_address: 'jgallo@cpg.org, hsan@cpg.org, mhershkovits@cpg.org, camghar@cpg.org, rburns@cpg.org'
+    subject: "NetApp volume replication report"
+    
+netapp_default_credentials: &netapp_default_credentials
+    user: root
+    pw: password1
+    
+netapp_controllers:
+    cpgnyfiler1: 
+        <<: *netapp_default_credentials
+    cpgnyfiler2:
+        <<: *netapp_default_credentials
+    cpgnjfiler:
+        <<: *netapp_default_credentials
+    cpgnjfiler2:
+        <<: *netapp_default_credentials

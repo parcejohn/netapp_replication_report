@@ -3,13 +3,11 @@ notification_settings:
     from_address: 'netapp_replication_report@example.com
     to_address: 'user@example.com, user2@example.com'
     subject: "NetApp volume replication report"
-    
-netapp_default_credentials: &netapp_default_credentials
-    user: root
-    pw: root
-    
+
 netapp_controllers:
-    filer1: 
-        <<: *netapp_default_credentials
+    filer1:
+        user: root
+        pw: root
     filer2:
-        <<: *netapp_default_credentials
+        user: user1
+        pw: secret

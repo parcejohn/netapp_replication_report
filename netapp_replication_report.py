@@ -95,9 +95,17 @@ def main():
                               config['netapp_controllers'][controller]['user'],
                               config['netapp_controllers'][controller]['pw']
                              )
-      report += na_filer.vol_snapmirror_report() + "\n"
+      try:
+         report += na_filer.vol_snapmirror_report(config['netapp_controllers'][controller]['ignore_volumes'])
+      except KeyError, ke:
+         report += na_filer.vol_snapmirror_report()
 
-    email_report(config, report)  
+      # If there is data in report for the current filer in the for-loop, add a new line
+      if report: report += "\n"
+
+    # If there is data in report after traversing ALL filers
+    if report: 
+      email_report(config, report) 
 
   elif  (args.hostname and args.username and args.password):
     na_filer = Netapp.Filer(

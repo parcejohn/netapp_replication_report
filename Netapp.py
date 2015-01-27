@@ -142,32 +142,29 @@ class Filer(object):
     return non_snapmirrored_vols
 
   # Volume protection report
-  def vol_snapmirror_report(self):
+  def vol_snapmirror_report(self, ignore_volumes=[]):
     # Get list of Volume Objects
     vols = self.get_volumes()
 
     # Initialize [non]snapmirrored volumes arrays
-    snapmirrored_vols = []
-    non_snapmirrored_vols = []
-    for vol in vols:
-      if self.is_vol_snapmirror_source(vol):
-        snapmirrored_vols.append(vol)
-      else:
-        non_snapmirrored_vols.append(vol)
+    snapmirrored_vols = self.get_snapmirrored_volumes()
+    non_snapmirrored_vols = self.get_non_snapmirrored_volumes()
 
-    if non_snapmirrored_vols or snapmirrored_vols:
-      report = "\n" + "="*10 + self.get_name().upper() + "="*10 + "\n"
-      report += "------------------------------------------------------\n"
+    # Apply ignore_volumes exclusion
+    snapmirrored_vols = [vol for vol in snapmirrored_vols if vol.child_get_string("name") not in ignore_volumes]
+    non_snapmirrored_vols = [vol for vol in non_snapmirrored_vols if vol.child_get_string("name") not in ignore_volumes]
 
-    # Generate report output
+    # Generate report for non protected volumes
+    # non_snapmirrored_vols_report 'string'
     if non_snapmirrored_vols:
-      report += "The following volumes are not protected by SnapMirror:\n"
-      report += "------------------------------------------------------\n"
+      non_snapmirrored_vols_report = "The following volumes are not protected by SnapMirror:\n"
+      non_snapmirrored_vols_report += "------------------------------------------------------\n"
 
       # Output volumes not snapmirrored
       for vol in sorted(non_snapmirrored_vols, key=lambda elm: elm.child_get_string("name")):
-         report += vol.child_get_string("name") + "\n"
+         non_snapmirrored_vols_report += vol.child_get_string("name") + "\n"
 
+    # Generate report for protected volumes that have a lag
     if snapmirrored_vols:
       report_lag = ''
       for vol in sorted(snapmirrored_vols, key=lambda elm: elm.child_get_string("name")):
@@ -184,13 +181,21 @@ class Filer(object):
 
       if report_lag:
         # Output Volumes snapmirrored with more than 24h RPO
-        report += "\n\nThe following volumes are over 24h RPO:\n"
+        snapmirrored_vols_report = "\n\nThe following volumes are over 24h RPO:\n"
         
         header = "%30s | %40s | %12s | %20s | %20s | %12s \n" % ('source-location','destination-location','lag-time(h)','last-transfer-size(GB)','last-transfer-duration(h)','transfering')
         separator = "-" * len(header) + "\n"
 
-        report += separator + header + separator
-        report += report_lag
+        snapmirrored_vols_report += separator + header + separator
+        snapmirrored_vols_report += report_lag
 
-    return report
+    # Report Filer Name/Header + non protected vols + reported lag
+    if report_lag or non_snapmirrored_vols:
+      report = "\n" + "="*10 + self.get_name().upper() + "="*10 + "\n"
+      report += "------------------------------------------------------\n"
+      report += non_snapmirrored_vols_report
+      report += report_lag
+      return report
+    else:
+      return ''
 

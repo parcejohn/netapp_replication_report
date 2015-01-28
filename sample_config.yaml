@@ -1,6 +1,6 @@
 notification_settings:
     smtp_server: 'smtp.example.com'
-    from_address: 'netapp_replication_report@example.com
+    from_address: 'netapp_replication_report@example.com'
     to_address: 'user@example.com, user2@example.com'
     subject: "NetApp volume replication report"
 

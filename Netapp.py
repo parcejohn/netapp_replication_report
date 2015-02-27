@@ -167,7 +167,8 @@ class Filer(object):
     # Generate report for non protected volumes
     # non_snapmirrored_vols_report 'string'
     if non_snapmirrored_vols:
-      non_snapmirrored_vols_report = "The following volumes are not protected by SnapMirror:\n"
+      non_snapmirrored_vols_report = "------------------------------------------------------\n"
+      non_snapmirrored_vols_report += "The following volumes are not protected by SnapMirror:\n"
       non_snapmirrored_vols_report += "------------------------------------------------------\n"
 
       # Output volumes not snapmirrored
@@ -202,9 +203,13 @@ class Filer(object):
     # Report Filer Name/Header + non protected vols + reported lag
     if report_lag or non_snapmirrored_vols:
       report = "\n" + "="*10 + self.get_name().upper() + "="*10 + "\n"
-      report += "------------------------------------------------------\n"
-      report += non_snapmirrored_vols_report
-      report += snapmirrored_vols_report
+      
+      if non_snapmirrored_vols:
+        report += non_snapmirrored_vols_report
+      
+      if report_lag:      
+        report += snapmirrored_vols_report
+      
       return report
     else:
       return ''

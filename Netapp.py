@@ -194,7 +194,7 @@ class Filer(object):
       report = "\n" + "="*10 + self.get_name().upper() + "="*10 + "\n"
       report += "------------------------------------------------------\n"
       report += non_snapmirrored_vols_report
-      report += report_lag
+      report += snapmirrored_vols_report
       return report
     else:
       return ''

@@ -51,9 +51,19 @@ class Filer(object):
     volumes = volume_list_info.child_get("volumes")
 
     # Create a list of volumes based off the 'volumes' XML representation
+    # User instance/object.sprintf()
     volume_list = volumes.children_get()
     return volume_list
                      
+  def is_vol_online(self,volume):
+    if not isinstance(volume, str):
+      vol_state = volume.child_get_string("state")
+
+    if vol_state == 'online':
+      return True
+    else:
+      return False 
+
   # Return BOOL for volume protected/SnapMirrored status
   def is_vol_snapmirror_source(self, volume):
     if not isinstance(volume, str):
@@ -125,7 +135,7 @@ class Filer(object):
     vols = self.get_volumes()
 
     for vol in vols:
-      if self.is_vol_snapmirror_source(vol):
+      if self.is_vol_online(vol) and self.is_vol_snapmirror_source(vol):
         snapmirrored_vols.append(vol)
     
     return snapmirrored_vols
@@ -136,7 +146,7 @@ class Filer(object):
     vols = self.get_volumes()
 
     for vol in vols:
-      if not self.is_vol_snapmirror_source(vol):
+      if self.is_vol_online(vol) and not self.is_vol_snapmirror_source(vol):
         non_snapmirrored_vols.append(vol)
 
     return non_snapmirrored_vols

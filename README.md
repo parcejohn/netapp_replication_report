@@ -33,7 +33,7 @@ If using CLI for single controller:
 # Cli usage
 
 09:17 $ ./netapp_replication_report.py -s filer1 -uroot -psecret -r 86400
-```
+<nowiki>
 ==========FILER1==========
 ------------------------------------------------------
 The following volumes are not protected by SnapMirror:
@@ -48,7 +48,7 @@ The following volumes are over 24.0h RPO:
                source-location |                     destination-location |        lag-time(h) | last-transfer-size(GB) | last-transfer-duration(h) |  transfering
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
    FILER1:vmstore |              DRFILER:vmstore |     1 day, 7:20:14 |               4.21(GB) |                   0:39:48 |    40.72(GB)
-```
+</nowiki>
 
 # Configuration file usage
 

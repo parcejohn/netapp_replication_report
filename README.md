@@ -10,7 +10,7 @@ It can take arguments via command line or you can pass a configuration file in y
 usage: netapp_replication_report.py [-h] [-c CONFIG] [-s HOSTNAME]
                                     [-u USERNAME] [-p PASSWORD] [-r RPO]
 
-<pre>>>>> NetApp Replication Report <<<
+```>>>> NetApp Replication Report <<<
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -28,11 +28,12 @@ If using CLI for single controller:
                         Filer password
   -r RPO, --rpo RPO     RPO in seconds (default 24h)
 
-</pre>
+```
+
 # Cli usage
 
 09:17 $ ./netapp_replication_report.py -s filer1 -uroot -psecret -r 86400
-
+```
 ==========FILER1==========
 ------------------------------------------------------
 The following volumes are not protected by SnapMirror:
@@ -47,11 +48,13 @@ The following volumes are over 24.0h RPO:
                source-location |                     destination-location |        lag-time(h) | last-transfer-size(GB) | last-transfer-duration(h) |  transfering
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
    FILER1:vmstore |              DRFILER:vmstore |     1 day, 7:20:14 |               4.21(GB) |                   0:39:48 |    40.72(GB)
+```
 
 # Configuration file usage
 
 You can also use a configuration file with all the information needed, including multiple controllers, multiple credentials, RPO, notification settings and also add volumes to ignore (volumes you already know are not protected and dont need to protect)
 
+```yaml
 Sample config.yaml file:
 
 notification_settings:
@@ -72,7 +75,8 @@ netapp_controllers:
         user: user1
         pw: secret
         rpo: 172800
-
+```
 You can call the above from the command line or use it as a CRON job (that is how I use it)
+
 0 7 * * *  /home/john/netapp_replication_report/netapp_replication_report.py -c /home/john/netapp_replication_report/config.yaml
 

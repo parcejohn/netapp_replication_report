@@ -10,7 +10,8 @@ It can take arguments via command line or you can pass a configuration file in y
 usage: netapp_replication_report.py [-h] [-c CONFIG] [-s HOSTNAME]
                                     [-u USERNAME] [-p PASSWORD] [-r RPO]
 
-```>>>> NetApp Replication Report <<<
+```
+>>>> NetApp Replication Report <<<
 
 optional arguments:
   -h, --help            show this help message and exit

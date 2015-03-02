@@ -8,8 +8,10 @@ netapp_controllers:
     filer1:
         user: root
         pw: root
+        rpo: 86400
         ignore_volumes:
             - vol0
     filer2:
         user: user1
         pw: secret
+        rpo: 172800

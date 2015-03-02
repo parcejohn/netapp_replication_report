@@ -152,7 +152,7 @@ class Filer(object):
     return non_snapmirrored_vols
 
   # Volume protection report
-  def vol_snapmirror_report(self, ignore_volumes=[]):
+  def vol_snapmirror_report(self, rpo=86400, ignore_volumes=[]):
     # Get list of Volume Objects
     vols = self.get_volumes()
 
@@ -179,22 +179,22 @@ class Filer(object):
     if snapmirrored_vols:
       report_lag = ''
       for vol in sorted(snapmirrored_vols, key=lambda elm: elm.child_get_string("name")):
-        if self.get_vol_snapmirror_lag(vol) > 86400:
-          report_lag += "%30s | %40s | %12s | %18.2f(GB) | %20s | %12s " % (
+        if self.get_vol_snapmirror_lag(vol) > int(rpo):
+          report_lag += "%30s | %40s | %18s | %18.2f(GB) | %25s | %8.2f(GB) " % (
                                                       self.get_vol_snapmirror_source(vol),
                                                       self.get_vol_snapmirror_destination(vol),
                                                       str(datetime.timedelta(seconds=self.get_vol_snapmirror_lag(vol))),
                                                       float(self.get_vol_snapmirror_last_transfer_size(vol))/1048576,
                                                       str(datetime.timedelta(seconds=self.get_vol_snapmirror_last_transfer_duration(vol))),
-                                                      self.get_vol_snapmirror_progress(vol)
+                                                      float(self.get_vol_snapmirror_progress(vol))/1024/1024
                                                       )
           report_lag += "\n"
 
       if report_lag:
         # Output Volumes snapmirrored with more than 24h RPO
-        snapmirrored_vols_report = "\n\nThe following volumes are over 24h RPO:\n"
+        snapmirrored_vols_report = "\n\nThe following volumes are over %.1fh RPO:\n" % (float(rpo)/3600)
         
-        header = "%30s | %40s | %12s | %20s | %20s | %12s \n" % ('source-location','destination-location','lag-time(h)','last-transfer-size(GB)','last-transfer-duration(h)','transfering')
+        header = "%30s | %40s | %18s | %20s | %25s | %12s \n" % ('source-location','destination-location','lag-time(h)','last-transfer-size(GB)','last-transfer-duration(h)','transfering')
         separator = "-" * len(header) + "\n"
 
         snapmirrored_vols_report += separator + header + separator

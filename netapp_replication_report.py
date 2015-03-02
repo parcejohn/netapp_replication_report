@@ -11,11 +11,11 @@ sys.path.append("netapp_sdk")
 import Netapp
 
 # Return dict woth config settings
-def parse_config(filername):
+def parse_config(filename):
   config = {}
 
   try:
-    with open(filername, 'r') as ymlfile:
+    with open(filename, 'r') as ymlfile:
       cfg = yaml.load(ymlfile)
   except IOError, ie:
     sys.stderr.write('Cannot open configuration file\n')
@@ -71,6 +71,9 @@ def parse_arguments():
   cli_group.add_argument('-p', '--password',
                   action='store', dest='password',
                   help='Filer password')
+  cli_group.add_argument('-r', '--rpo',
+                  action='store', dest='rpo',
+                  help='RPO in seconds (default 24h)')
 
   args = parser.parse_args()
 
@@ -96,7 +99,7 @@ def main():
                               config['netapp_controllers'][controller]['pw']
                              )
       try:
-         report += na_filer.vol_snapmirror_report(config['netapp_controllers'][controller]['ignore_volumes'])
+         report += na_filer.vol_snapmirror_report(config['netapp_controllers'][controller]['rpo'],config['netapp_controllers'][controller]['ignore_volumes'])
       except KeyError, ke:
          report += na_filer.vol_snapmirror_report()
 
@@ -107,13 +110,14 @@ def main():
     if report: 
       email_report(config, report) 
 
+  # Ensure that if using cli, that the below arguments are passed
   elif  (args.hostname and args.username and args.password):
     na_filer = Netapp.Filer(
                             args.hostname,
                             args.username,
                             args.password
                            )
-    report += na_filer.vol_snapmirror_report() + "\n"
+    report += na_filer.vol_snapmirror_report(args.rpo) + "\n"
   else: 
     sys.stderr.write('You must choose valid config file (yaml) OR use -s -u -p for hostname, user, password respectively, use -h for detailed help\n')
 

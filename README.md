@@ -10,7 +10,7 @@ It can take arguments via command line or you can pass a configuration file in y
 usage: netapp_replication_report.py [-h] [-c CONFIG] [-s HOSTNAME]
                                     [-u USERNAME] [-p PASSWORD] [-r RPO]
 
-<nowiki>>>>> NetApp Replication Report <<<
+<pre>>>>> NetApp Replication Report <<<
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -28,7 +28,7 @@ If using CLI for single controller:
                         Filer password
   -r RPO, --rpo RPO     RPO in seconds (default 24h)
 
-</nowiki>
+</pre>
 # Cli usage
 
 09:17 $ ./netapp_replication_report.py -s filer1 -uroot -psecret -r 86400

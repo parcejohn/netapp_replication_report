@@ -33,9 +33,9 @@ If using CLI for single controller:
 
 # Cli usage
 
-09:17 $ ./netapp_replication_report.py -s filer1 -uroot -psecret -r 86400
+$ ./netapp_replication_report.py -s filer1 -uroot -psecret -r 86400
 <nowiki>
-==========FILER1==========
+FILER1
 ------------------------------------------------------
 The following volumes are not protected by SnapMirror:
 ------------------------------------------------------

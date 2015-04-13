@@ -111,15 +111,15 @@ def main():
       email_report(config, report) 
 
   # Ensure that if using cli, that the below arguments are passed
-  elif  (args.hostname and args.username and args.password):
+  elif  (args.hostname and args.username and args.password and args.rpo):
     na_filer = Netapp.Filer(
                             args.hostname,
                             args.username,
-                            args.password
+                            args.password,
                            )
     report += na_filer.vol_snapmirror_report(args.rpo) + "\n"
   else: 
-    sys.stderr.write('You must choose valid config file (yaml) OR use -s -u -p for hostname, user, password respectively, use -h for detailed help\n')
+    sys.stderr.write('You must choose valid config file (yaml) OR use -s -u -p -r for hostname, user, password, RPO respectively; use -h for detailed help\n')
 
   print report
 

@@ -33,7 +33,7 @@ class Filer(object):
         sys.exit (2)
 
       self.api.set_admin_user(user, passwd)
-      self.api.set_transport_type('HTTP')
+      self.api.set_transport_type('HTTPS')
 
       self.name = hostname
 
